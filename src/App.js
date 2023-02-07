@@ -1,10 +1,14 @@
-import React, {  useEffect, useState } from 'react'  
-import Card from './Components/Card';
+import React, {  useEffect, useState } from 'react'   
+// import { MDBInputGroup, MDBInput, MDBIcon, MDBAlert, MDBBtn } from 'mdb-react-ui-kit';
+import Card from './Components/Card'; 
+
+
 
 
     export const App = () => {  
 
       const [list, setlist] = useState([]) ;
+      const [country, setcountry] = useState("Country") ;
       async function Api(){ 
    
         const options = {
@@ -17,9 +21,14 @@ import Card from './Components/Card';
         
        let a=await fetch('https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com/api/npm-covid-data/', options)
       
-         a=await a.json()  
+         a=await a.json()   
          setlist(a[3]) ;
-         console.log(a[3])  
+       
+        // const b= await a.filter(x=>{
+        //      return x.Country=={country};
+        //   })  
+        //   setlist(b[0]) ;
+          // console.log(b[0].Country) 
       }
    
  
@@ -28,18 +37,39 @@ import Card from './Components/Card';
 
     }, [])  
    
+    // function handlechange(e){ 
+     
+    //     setcountry(e.target.value) ; 
+      
+    // }
     
+    // function search(){ 
     
+    //    console.log(country)
+      
+    // //  Api();
+    // }
   
   return (
-    <>
-     
-      <Card name="activecases" val= {list.ActiveCases }> </Card>   
-      <Card name="totalcases" val= {list.TotalCases }> </Card>   
-      <Card name="totaldeath" val= {list.TotalDeaths }> </Card>   
-      <Card name="totalrecovered" val= {list.TotalRecovered }> </Card>   
+    <> 
+       <div className="con"> 
+        <h1>Live Covid19 stats</h1>  
+          
+        {/* <MDBInputGroup>
+        <MDBInput label='Search' type="text" id="name" onChange={handlechange} value={country} />
+        <MDBBtn onClick={() => search()} rippleColor='dark'>
+          <MDBIcon icon='search' />
+        </MDBBtn>
+      </MDBInputGroup>  */}
+   
+       
+      <Card name="COUNTRY" val= {list.Country}> </Card>  
+      <Card name="ACTIVE" val= {list.ActiveCases }> </Card>   
+      <Card name="CASES" val= {list.TotalCases }> </Card>   
+      <Card name=" DEATH" val= {list.TotalDeaths }> </Card>   
+      <Card name="RECOVERED" val= {list.TotalRecovered }> </Card>   
 
-        
+      </div> 
     </>
   )
 }

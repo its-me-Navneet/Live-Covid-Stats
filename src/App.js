@@ -1,5 +1,5 @@
 import React, {  useEffect, useState } from 'react'   
-// import { MDBInputGroup, MDBInput, MDBIcon, MDBAlert, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBInputGroup, MDBInput, MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
 import Card from './Components/Card'; 
 
 
@@ -8,7 +8,9 @@ import Card from './Components/Card';
     export const App = () => {  
 
       const [list, setlist] = useState([]) ;
-      const [country, setcountry] = useState("Country") ;
+      const [Clist, setClist] = useState([]) ;
+      const [country, setcountry] = useState("India") ; 
+        
       async function Api(){ 
    
         const options = {
@@ -22,54 +24,69 @@ import Card from './Components/Card';
        let a=await fetch('https://vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com/api/npm-covid-data/', options)
       
          a=await a.json()   
-         setlist(a[3]) ;
+         setClist(a) ; 
+         //console.log(Clist) ;
        
-        // const b= await a.filter(x=>{
-        //      return x.Country=={country};
-        //   })  
-        //   setlist(b[0]) ;
-          // console.log(b[0].Country) 
-      }
-   
+      }  
+  
+       function Filter(){  
+
+        const b= Clist.filter(x=>{
+             return x.Country===country;
+          }) 
+           setlist(b[0]);
+          //console.log(list)    
+        } 
+        useEffect(()=>{
+          Filter();    
+        },[Clist]);
  
     useEffect(() => {
-        Api()  ;
-
+         Api()  ; 
+       
     }, [])  
    
-    // function handlechange(e){ 
+    function handlechange(e){ 
+      
+        setcountry(e.target.value) ; 
+      
+    }  
+    function Display(){
+      return(<div><Card name="COUNTRY" val= {list.Country}> </Card>  
+      <Card name="ACTIVE" val= {list.ActiveCases }> </Card>   
+      <Card name="CASES" val= {list.TotalCases }> </Card>   
+      <Card name=" DEATH" val= {list.TotalDeaths }> </Card>   
+      <Card name="RECOVERED" val= {list.TotalRecovered }> </Card>    
+      </div>)
+    }     
+    function search(){ 
      
-    //     setcountry(e.target.value) ; 
-      
-    // }
+         Filter(); 
     
-    // function search(){ 
+    } 
     
-    //    console.log(country)
-      
-    // //  Api();
-    // }
+    
   
   return (
     <> 
-       <div className="con"> 
-        <h1>Live Covid19 stats</h1>  
-          
-        {/* <MDBInputGroup>
+       <div className="con">  
+       <div className="nav"> 
+        <div className="heading">
+        <h1>Live Covid19 Stats</h1>  
+        </div>
+        <div className="search">
+        <MDBInputGroup>
         <MDBInput label='Search' type="text" id="name" onChange={handlechange} value={country} />
         <MDBBtn onClick={() => search()} rippleColor='dark'>
           <MDBIcon icon='search' />
         </MDBBtn>
-      </MDBInputGroup>  */}
-   
-       
-      <Card name="COUNTRY" val= {list.Country}> </Card>  
-      <Card name="ACTIVE" val= {list.ActiveCases }> </Card>   
-      <Card name="CASES" val= {list.TotalCases }> </Card>   
-      <Card name=" DEATH" val= {list.TotalDeaths }> </Card>   
-      <Card name="RECOVERED" val= {list.TotalRecovered }> </Card>   
-
-      </div> 
+      </MDBInputGroup>  
+      </div>
+      </div>
+      <div className="disp">
+      {list?Display():""} 
+      </div>
+      </div>   
     </>
   )
 }
